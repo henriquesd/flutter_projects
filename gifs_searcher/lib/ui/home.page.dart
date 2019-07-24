@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 
 import 'gif_page.dart';
 
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   Future<Map> _getGifs() async {
     http.Response response;
 
-  if (_search == null)
+   if (_search == null)
     response = await http.get("https://api.giphy.com/v1/gifs/trending?api_key=xxxxxxxx&limit=20&rating=G");
   else
     response = await http.get("https://api.giphy.com/v1/gifs/search?api_key=xxxxxxxx&q=$_search&limit=$_offset&offset=75&rating=G&lang=en");
@@ -120,6 +121,9 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(context,
                   MaterialPageRoute(builder: (context) => GifPage(snapshot.data["data"][index]))
                 );
+              },
+              onLongPress: (){
+                Share.share(snapshot.data["data"][index]["images"]["fixed_height"]["url"]);
               },
             );
           else
